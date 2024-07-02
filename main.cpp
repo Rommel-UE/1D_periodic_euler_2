@@ -69,7 +69,8 @@ int main(int narg, char **argv)
     Central1D<FLOATTYPE> rhs(u, xj, lf);
 
     FLOATTYPE CFL = 2.4;
-    FLOATTYPE dt = CFL * datax[1];
+    FLOATTYPE dx = datax[1]; // Optimización: extraer datax[1] fuera del bucle
+    FLOATTYPE dt = CFL * dx;
 
     // Output Initial Condition
     write2File(xj, u, "initialCondition.csv");
@@ -109,7 +110,7 @@ int main(int narg, char **argv)
     FLOATTYPE err = calcL2norm(Uinit, u);
     std::cout << std::setprecision(4) << "Comp. time: " << compTime;
     std::cout << " sec. Error: " << err / k;
-    std::cout << " kdx: " << k * datax[1] * 2. * M_PI;
+    std::cout << " kdx: " << k * dx * 2. * M_PI;
     std::cout << std::endl;
 
     MPI_Finalize(); // Finalización de MPI
