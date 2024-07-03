@@ -19,12 +19,10 @@ Un(_Un)
   coeffsB[2] = 2.;
   coeffsB[3] = 1.;
 
-  fi = new DataStruct<T>[nSteps];
+  fi = new DataStruct<T>[2]; // Cambio del l arreglo `fi` para que tenga solo 2 elementos en lugar de 4.
 
   fi[0].setSize(Un.getSize());
   fi[1].setSize(Un.getSize());
-  fi[2].setSize(Un.getSize());
-  fi[3].setSize(Un.getSize());
 
   Ui.setSize(Un.getSize());
 };
@@ -66,7 +64,7 @@ void RungeKutta4<T>::stepUi(T dt)
   }
   else
   {
-    T *datafi = fi[currentStep-1].getData();
+    T *datafi = fi[currentStep % 2].getData(); // Use modulo operator to switch between 0 and 1
     T *dataUi = Ui.getData();
     const T *dataU  = Un.getData();
 
@@ -91,7 +89,7 @@ void RungeKutta4<T>::finalizeRK(const T dt)
   
   for(int s = 0; s < nSteps; s++)
   {
-    const T *dataFi = fi[s].getData();
+    const T *dataFi = fi[s % 2].getData(); // Use modulo operator to switch between 0 and 1
     const T b = coeffsB[s];
 
     for(int n = 0; n < Ui.getSize(); n++)
@@ -110,7 +108,7 @@ void RungeKutta4<T>::finalizeRK(const T dt)
 template<class T>
 void RungeKutta4<T>::setFi(DataStruct<T> &_F)
 {
-  T *dataFi = fi[currentStep].getData();
+  T *dataFi = fi[currentStep % 2].getData(); // Use modulo operator to switch between 0 and 1
   const T *dataF  = _F.getData();
 
   for(int n = 0; n < Ui.getSize(); n++)
